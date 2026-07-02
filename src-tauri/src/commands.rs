@@ -1387,25 +1387,14 @@ pub fn launch_avd(
                             .args(["wait-for-device"])
                             .output();
                         
-                        // Disable animations
-                        let _ = std::process::Command::new(&adb_exe)
-                            .args(["shell", "settings", "put", "global", "window_animation_scale", "0.0"])
-                            .output();
-                        let _ = std::process::Command::new(&adb_exe)
-                            .args(["shell", "settings", "put", "global", "transition_animation_scale", "0.0"])
-                            .output();
-                        let _ = std::process::Command::new(&adb_exe)
-                            .args(["shell", "settings", "put", "global", "animator_duration_scale", "0.0"])
-                            .output();
-                        
-                        // Disable HW Overlays in SurfaceFlinger
+                        // Disable HW Overlays in SurfaceFlinger (Force GPU composition)
                         let _ = std::process::Command::new(&adb_exe)
                             .args(["shell", "service", "call", "SurfaceFlinger", "1008", "i32", "1"])
                             .output();
                         
                         let _ = window_clone3.emit(
                             "log",
-                            format!("⚡ Speed Mode applied to \"{}\": UI Animations disabled, GPU composition forced.", name_clone3),
+                            format!("⚡ Speed Mode applied to \"{}\": GPU composition forced (Disable HW Overlays).", name_clone3),
                         );
                     }
                 });
