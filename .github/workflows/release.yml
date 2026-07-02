@@ -83,7 +83,7 @@ jobs:
           (Get-Content src-tauri/tauri.conf.json) -replace '"version":\s*"[^"]+"', "`"version`": `"$version`"" | Set-Content src-tauri/tauri.conf.json
           
           # Update Cargo.toml version
-          (Get-Content src-tauri/Cargo.toml) -replace 'version\s*=\s*"[^"]+"', "version = `"$version`"" | Set-Content src-tauri/Cargo.toml
+          (Get-Content src-tauri/Cargo.toml) -replace '^version\s*=\s*"[^"]+"', "version = `"$version`"" | Set-Content src-tauri/Cargo.toml
           
           Write-Host "Updated project configuration versions to $version"
 
