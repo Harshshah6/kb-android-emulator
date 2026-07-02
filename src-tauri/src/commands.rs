@@ -1141,6 +1141,21 @@ fn auto_repair_wear_os_config(name: &str) {
     }
 }
 
+fn clean_stale_locks(name: &str) {
+    let avd_dir = avd_dir().join(format!("{}.avd", name));
+    if !avd_dir.exists() { return; }
+
+    let lock_file = avd_dir.join("multiinstance.lock");
+    if lock_file.exists() {
+        let _ = std::fs::remove_file(&lock_file);
+    }
+
+    let lock_dir = avd_dir.join("hardware-qemu.ini.lock");
+    if lock_dir.exists() {
+        let _ = std::fs::remove_dir_all(&lock_dir);
+    }
+}
+
 // ─── Launch AVD ───────────────────────────────────────────────────────────────
 #[tauri::command]
 pub fn launch_avd(
@@ -1159,6 +1174,9 @@ pub fn launch_avd(
 ) -> CommandResult {
     // Auto-repair Wear OS configuration if it has corrupted phone settings
     auto_repair_wear_os_config(&name);
+
+    // Clean stale lock files from previous crashes
+    clean_stale_locks(&name);
 
     let emulator_exe = emulator_dir().join("emulator.exe");
     if !emulator_exe.exists() {
