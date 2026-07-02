@@ -1311,7 +1311,7 @@ pub fn launch_avd(
     let emulator_cwd = emulator_dir();
     // Spawn the emulator detached and pipe stdout; stderr is null-routed because
     // the emulator mirrors every log line to both streams — reading one is enough.
-    let child = new_command!(&emulator_exe)
+    let child = std::process::Command::new(&emulator_exe)
         .current_dir(&emulator_cwd)
         .args(&args)
         .env("ANDROID_AVD_HOME", &avd_home)
