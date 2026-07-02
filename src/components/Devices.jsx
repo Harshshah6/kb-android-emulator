@@ -239,7 +239,13 @@ export function DeviceCard({ avd, onLaunch, onStop, onDelete, onEdit, logs }) {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
   const handleLaunch = async () => { setLaunching(true); await onLaunch(avd.name, false); setLaunching(false) }
-  const handleWipeLaunch = async () => { setLaunching(true); await onLaunch(avd.name, true); setLaunching(false) }
+  const handleWipeLaunch = async () => {
+    const ok = confirm(`⚠️ WARNING: Wipe & Boot will perform a Factory Reset on "${avd.name.replace(/_/g, ' ')}"! \n\nThis will permanently delete all installed apps, accounts, settings, and user data. \n\nAre you sure you want to completely wipe this device?`)
+    if (!ok) return
+    setLaunching(true)
+    await onLaunch(avd.name, true)
+    setLaunching(false)
+  }
   const handleStop = async () => { setStopping(true); await onStop(avd.name); setStopping(false) }
   
   const handleDelete = () => {
