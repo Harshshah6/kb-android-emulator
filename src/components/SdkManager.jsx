@@ -18,8 +18,8 @@ const TABS = [
 
 // Helper to parse package metadata dynamically and future-proof it
 function parseImageDetails(img) {
-  const id = img.id || '';
-  const name = img.name || '';
+  const id = String(img?.id || '');
+  const name = String(img?.name || '');
   
   // Example ID: system-images;android-35;google_apis_playstore;x86_64
   const parts = id.split(';');
@@ -114,13 +114,16 @@ export function SdkManager({ status, refreshStatus }) {
   // Filter dynamic images based on active tab and search input
   const filteredImages = validSystemImages.filter(img => {
     const details = parseImageDetails(img)
-    const matchesSearch = img.name.toLowerCase().includes(search.toLowerCase()) || 
-                          img.id.toLowerCase().includes(search.toLowerCase());
+    const nameStr = String(img?.name || '');
+    const idStr = String(img?.id || '');
+    
+    const matchesSearch = nameStr.toLowerCase().includes(search.toLowerCase()) || 
+                          idStr.toLowerCase().includes(search.toLowerCase());
     if (!matchesSearch) return false
 
-    const isWear = img.id.includes('wear') || img.name.toLowerCase().includes('wear');
-    const isTv = img.id.includes('tv') || img.id.includes('google-tv') || img.name.toLowerCase().includes('tv');
-    const isAuto = img.id.includes('automotive') || img.name.toLowerCase().includes('automotive');
+    const isWear = idStr.includes('wear') || nameStr.toLowerCase().includes('wear');
+    const isTv = idStr.includes('tv') || idStr.includes('google-tv') || nameStr.toLowerCase().includes('tv');
+    const isAuto = idStr.includes('automotive') || nameStr.toLowerCase().includes('automotive');
 
     switch (activeTab) {
       case 'stable_playstore': 
@@ -411,9 +414,9 @@ export function SdkManager({ status, refreshStatus }) {
                       padding: '8px 12px'
                     }}>
                       <span style={{ fontSize: 18 }}>
-                        {details.typeLabel.startsWith('⌚') ? '⌚' : 
-                         details.typeLabel.startsWith('📺') ? '📺' : 
-                         details.typeLabel.startsWith('🚗') ? '🚗' : '📱'}
+                        {details.typeLabel?.startsWith('⌚') ? '⌚' : 
+                         details.typeLabel?.startsWith('📺') ? '📺' : 
+                         details.typeLabel?.startsWith('🚗') ? '🚗' : '📱'}
                       </span>
                       <div style={{ flex: 1 }}>
                         <div className="pkg-name" style={{ fontSize: 12, fontWeight: 600 }}>
@@ -479,7 +482,7 @@ export function SdkManager({ status, refreshStatus }) {
                 style={{ padding: '6px 10px', fontSize: 11 }}
               >
                 <span style={{ marginRight: 4 }}>{tab.icon}</span>
-                {tab.label.split(' ')[1] || tab.label}
+                {tab.label}
               </button>
             ))}
           </div>
