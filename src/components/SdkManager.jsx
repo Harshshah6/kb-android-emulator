@@ -55,11 +55,18 @@ function parseImageDetails(img) {
   const isWear = id.includes('wear') || name.toLowerCase().includes('wear');
   const isTv = id.includes('tv') || id.includes('google-tv') || name.toLowerCase().includes('tv');
   const isAuto = id.includes('automotive') || name.toLowerCase().includes('auto');
-  
   let deviceType = "Phone / Tablet";
-  if (isWear) deviceType = "Wear OS Watch";
-  else if (isTv) deviceType = "Android TV";
-  else if (isAuto) deviceType = "Automotive Car";
+  let typeLabel = "📱 Phone";
+  if (isWear) {
+    deviceType = "Wear OS Watch";
+    typeLabel = "⌚ Wear OS";
+  } else if (isTv) {
+    deviceType = "Android TV";
+    typeLabel = "📺 Android TV";
+  } else if (isAuto) {
+    deviceType = "Automotive Car";
+    typeLabel = "🚗 Automotive";
+  }
 
   // System services/APIs
   let services = "Google APIs";
