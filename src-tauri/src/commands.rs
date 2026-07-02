@@ -114,10 +114,7 @@ fn build_env() -> HashMap<String, String> {
     // Low-latency WASAPI Audio Optimizations
     env.insert("QEMU_AUDIO_TIMER_PERIOD".to_string(), "0".to_string());
     env.insert("QEMU_WASAPI_BUF_SIZE".to_string(), "512".to_string());
-    
-    // Force ANGLE (Direct3D11/DirectX translation) on Windows
-    env.insert("ANDROID_EMULATOR_USE_ANGLE".to_string(), "1".to_string());
-    
+
     env
 }
 
@@ -1287,6 +1284,12 @@ pub fn launch_avd(
         args.push("-netsim-args".to_string());
         args.push(flag.to_string());
     }
+
+    // Suppress the Qt layered extended-window panel. On Windows, this panel
+    // can trigger a fatal UpdateLayeredWindowIndirect error when the process
+    // is launched from an installed EXE, causing the emulator to crash and
+    // restart in a loop showing only the boot logo.
+    args.push("-qt-hide-android-settings".to_string());
 
     let emulator_cwd = emulator_dir();
     // Spawn the emulator detached and pipe stdout; stderr is null-routed because
