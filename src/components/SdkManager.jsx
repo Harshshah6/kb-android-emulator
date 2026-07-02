@@ -74,6 +74,12 @@ function parseImageDetails(img) {
   if (id.includes('playstore') || name.toLowerCase().includes('playstore') || name.toLowerCase().includes('play store')) {
     services = "Google Play Store (with Services)";
     shortServices = "Play Store";
+  } else if (id.includes('google-tv') || id.includes('google_tv') || name.toLowerCase().includes('google tv') || name.toLowerCase().includes('google-tv')) {
+    services = "Google TV (with Play Services)";
+    shortServices = "Google TV";
+  } else if (id.includes('android-tv') || id.includes('android_tv')) {
+    services = "Android TV (with Services)";
+    shortServices = "Android TV";
   } else if (id.includes('google_apis') || name.toLowerCase().includes('google apis')) {
     services = "Google APIs Developer Image";
     shortServices = "Google APIs";
@@ -83,8 +89,8 @@ function parseImageDetails(img) {
   }
 
   const is16k = id.includes('ps16k') || id.includes('16k') || id.includes('16kb');
-  // API levels higher than 35 (Android 15) or explicit preview tags indicate Beta/Preview
-  const isPreview = id.includes('preview') || id.includes('beta') || name.toLowerCase().includes('preview') || name.toLowerCase().includes('beta') || is16k || apiLevel > 35;
+  // API levels indicating Beta/Preview are identified by tags like 'preview' or 'beta'
+  const isPreview = id.includes('preview') || id.includes('beta') || name.toLowerCase().includes('preview') || name.toLowerCase().includes('beta') || is16k;
   const stability = isPreview ? "Beta / Preview" : "Stable";
 
   return {
